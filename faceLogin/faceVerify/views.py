@@ -21,7 +21,7 @@ def register(request):
             messages.success(request, f"New Account Created: {username}")
             login(request, user)
             messages.info(request, f"You are logged in as {username}")
-            return redirect("faceVerify:home")
+            return render(request, "main/profile.html", context={'profile': user.profile})
         else:
             print(form.errors)
             for msg in form.error_messages:
@@ -49,7 +49,7 @@ def login_request(request) :
             if user is not None:
                 login(request,user)
                 messages.info(request, f"You are logged in as {username}")
-                return redirect('faceVerify:home')
+                return render(request, "main/profile.html", context={'profile': user.profile})
             else :
                 messages.error(request, "Authentication Failed")
         else:
