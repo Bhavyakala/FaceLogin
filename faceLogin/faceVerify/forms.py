@@ -6,17 +6,18 @@ from .models import Profile
 class NewUserForm(UserCreationForm):
     email = forms.EmailField()
     picture = forms.ImageField()
+    description = forms.CharField(max_length=250)
     class Meta():
         model = User
         fields = ("username", "email", "password1", "password2")
 
     def save(self, commit=True):
-        user = super(NewUserForm, self).save(commit=False)
-        user.email = self.cleaned_data.get("email")
-        user.picture = self.cleaned_data.get("picture")
-        if commit:
-            user.save()
+        if not commit:
+            raise NotImplementedError("Can't create User and UserProfile without database save")
+        user = super(NewUserForm, self).save(commit=True)
+        user.email = self.cleaned_data.get('email')
+        user.save()
         return user
 
-class NewAuthenticationForm(AuthenticationForm):
-    image = forms.ImageField()
+class NewAuthenticationForm(AuthenticationForm):    
+    image = forms.CharField(widget=forms.HiddenInput())

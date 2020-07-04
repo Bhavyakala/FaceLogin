@@ -17,5 +17,6 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('', include('faceVerify.urls')),
+    path('', include(('faceVerify.urls','faceVerify'), namespace='faceVerify')),
+    path('admin/', admin.site.urls),
 ]
