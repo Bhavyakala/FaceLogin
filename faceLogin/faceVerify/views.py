@@ -19,7 +19,7 @@ def register(request):
             user.save()
             username = form.cleaned_data.get('username')
             messages.success(request, f"New Account Created: {username}")
-            login(request, user)
+            login(request, user,backend='faceVerify.backends.FaceAuthBackend')
             messages.info(request, f"You are logged in as {username}")
             return render(request, "main/profile.html", context={'profile': user.profile})
         else:
@@ -36,7 +36,7 @@ def logout_request(request) :
     messages.info(request, 'Logged out successfully')
     return redirect("faceVerify:home")
 
-def login_request(request, backend='faceVerify.backends.FaceAuthBackend') :
+def login_request(request) :
     if request.method == 'POST':
         form = NewAuthenticationForm(request, data=request.POST)
         if form.is_valid():
@@ -47,7 +47,7 @@ def login_request(request, backend='faceVerify.backends.FaceAuthBackend') :
             f = FaceAuthBackend()
             user = f.authenticate(request, username, password)
             if user is not None:
-                login(request,user)
+                login(request,user,backend='faceVerify.backends.FaceAuthBackend')
                 messages.info(request, f"You are logged in as {username}")
                 return render(request, "main/profile.html", context={'profile': user.profile})
             else :
@@ -58,3 +58,7 @@ def login_request(request, backend='faceVerify.backends.FaceAuthBackend') :
                 messages.error(request, f"{form.error_messages[msg]}")
     form = NewAuthenticationForm()
     return render(request,"main/login.html", context={'form':form})
+
+
+def profile_request(request) :
+    return render(request=request, template_name="main/profile.html",context={'profile':request.user.profile})
