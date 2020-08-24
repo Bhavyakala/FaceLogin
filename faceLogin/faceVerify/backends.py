@@ -3,12 +3,14 @@ from django.contrib.auth.models import  User
 from .models import Profile  
 import face_recognition
 from .utils import prepare_image
+# from .FaceVerify import FaceVerify
 
 class FaceAuthBackend(ModelBackend):
     def authenticate(self, request, username=None, password=None, **kwargs):
         try:
             user = User.objects.get(username=username)
             profile = Profile.objects.get(user=user.id)
+            # f = FaceVerify()
             if user.check_password(password) and self.check_face_id(profile.picture, request.POST['image']) :
                 return user
         except User.DoesNotExist:

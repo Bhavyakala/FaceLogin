@@ -36,7 +36,7 @@ def logout_request(request) :
     messages.info(request, 'Logged out successfully')
     return redirect("faceVerify:home")
 
-def login_request(request) :
+def login_request(request, backend='faceVerify.backends.FaceAuthBackend') :
     if request.method == 'POST':
         form = NewAuthenticationForm(request, data=request.POST)
         if form.is_valid():
@@ -53,6 +53,7 @@ def login_request(request) :
             else :
                 messages.error(request, "Authentication Failed")
         else:
+            print(form.errors)
             for msg in form.error_messages:
                 messages.error(request, f"{form.error_messages[msg]}")
     form = NewAuthenticationForm()

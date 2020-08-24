@@ -102,6 +102,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
     'faceVerify.backends.FaceAuthBackend',
 ]
 
